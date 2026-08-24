@@ -36,13 +36,12 @@ public class AccountDAO {
                 );
             }
 
-            return null;
-        } finally {
-            if (generatedKeys != null) {
-                generatedKeys.close();
-            }
-            statement.close();
+        
+        } catch(SQLException e){
+
+            System.out.println(e.getMessage());
         }
+        return null;
     }
 
     public Account getAccountByUsername(String username) throws SQLException {
