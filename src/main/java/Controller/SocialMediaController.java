@@ -12,12 +12,12 @@ import io.javalin.http.Context;
  * refer to prior mini-project labs and lecture materials for guidance on how a controller may be built.
  */
 public class SocialMediaController {
-    private AccountService AccountService;
+    private AccountService acountService;
     
         
     
         public SocialMediaController(){
-            this.AccountService = new AccountService();
+            this.accountService = new AccountService();
     }
     /**
      * In order for the test cases to work, you will need to write the endpoints in the startAPI() method, as the test
@@ -27,10 +27,21 @@ public class SocialMediaController {
     public Javalin startAPI() {
         Javalin app = Javalin.create();
         app.post("/register", this::postAccountHandler);
-
+        app.post("/login", this::postLoginHandler);
         return app;
     }
-
+    private void postLoginHandler(Context context) {
+        
+            Account requestedAccount = context.bodyAsClass(Account.class);
+            Account registeredAcc = AccountService.getAccount(requestedAccount);
+            if(registeredAcc != null){
+                context.status(200);
+                context.json(registeredAcc);
+            } else{
+                context.status(401);
+            }
+        
+    }
     /**
      * This is an example handler for an example endpoint.
      * @param context The Javalin Context object manages information about both the HTTP request and response.

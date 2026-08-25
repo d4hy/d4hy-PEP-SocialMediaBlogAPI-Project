@@ -34,4 +34,8 @@ public class AccountService {
 
     return accountDAO.insertAccount(account);
   }
+  public Account getAccount (Account account){
+      return accountDAO.getAccountByUsername(account.getUsername());
+  }
+
 }
