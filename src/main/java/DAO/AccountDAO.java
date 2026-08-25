@@ -11,14 +11,12 @@ import java.sql.Statement;
 
 public class AccountDAO {
 
-    public Account insertAccount(Account account)  {
+    public Account insertAccount(Account account) {
         Connection connection = ConnectionUtil.getConnection();
-     
 
         try {
             String sql = "INSERT INTO account (username, password) VALUES (?, ?)";
-            PreparedStatement statement =
-                    connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             ResultSet generatedKeys = null;
             statement.setString(1, account.username);
             statement.setString(2, account.password);
@@ -33,26 +31,24 @@ public class AccountDAO {
                 return new Account(
                         generatedKeys.getInt(1),
                         account.username,
-                        account.password
-                );
+                        account.password);
             }
 
-        
-        } catch(SQLException e){
+        } catch (SQLException e) {
 
             System.out.println(e.getMessage());
         }
         return null;
     }
 
-    public Account getAccountByUsername(String username) throws SQLException {
+    public Account getAccountByUsername(String username) {
         Connection connection = ConnectionUtil.getConnection();
-        String sql =
-                "SELECT account_id, username, password FROM account WHERE username = ?";
-        PreparedStatement statement = connection.prepareStatement(sql);
-        ResultSet resultSet = null;
 
         try {
+            String sql = "SELECT account_id, username, password FROM account WHERE username = ?";
+            PreparedStatement statement = connection.prepareStatement(sql);
+            ResultSet resultSet = null;
+
             statement.setString(1, username);
             resultSet = statement.executeQuery();
 
@@ -61,12 +57,11 @@ public class AccountDAO {
             }
 
             return null;
-        } finally {
-            if (resultSet != null) {
-                resultSet.close();
-            }
-            statement.close();
+        } catch(SQLException e) {
+            System.out.println(e.getMessage());
+         
         }
+        return null;
     }
 
     public Account getAccountByUsernameAndPassword(String username, String password)
@@ -99,7 +94,6 @@ public class AccountDAO {
         return new Account(
                 resultSet.getInt("account_id"),
                 resultSet.getString("username"),
-                resultSet.getString("password")
-        );
+                resultSet.getString("password"));
     }
 }

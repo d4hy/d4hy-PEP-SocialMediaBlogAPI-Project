@@ -17,7 +17,7 @@ public class AccountService {
     this.accountDAO = accountDAO;
   }
 
-  public Account addAccount(Account account) throws SQLException {
+  public Account addAccount(Account account)  {
     if (account == null
         || account.getUsername() == null
         || account.getUsername().trim().isEmpty()) {
