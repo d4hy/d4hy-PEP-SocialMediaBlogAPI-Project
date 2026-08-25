@@ -57,22 +57,21 @@ public class AccountDAO {
             }
 
             return null;
-        } catch(SQLException e) {
+        } catch (SQLException e) {
             System.out.println(e.getMessage());
-         
+
         }
         return null;
     }
 
-    public Account getAccountByUsernameAndPassword(String username, String password)
-            throws SQLException {
+    public Account getAccountByUsernameAndPassword(String username, String password) {
         Connection connection = ConnectionUtil.getConnection();
-        String sql = "SELECT account_id, username, password " +
-                "FROM account WHERE username = ? AND password = ?";
-        PreparedStatement statement = connection.prepareStatement(sql);
-        ResultSet resultSet = null;
 
         try {
+            String sql = "SELECT account_id, username, password " +
+                    "FROM account WHERE username = ? AND password = ?";
+            PreparedStatement statement = connection.prepareStatement(sql);
+            ResultSet resultSet = null;
             statement.setString(1, username);
             statement.setString(2, password);
             resultSet = statement.executeQuery();
@@ -82,12 +81,11 @@ public class AccountDAO {
             }
 
             return null;
-        } finally {
-            if (resultSet != null) {
-                resultSet.close();
-            }
-            statement.close();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+
         }
+        return null;
     }
 
     private Account mapAccount(ResultSet resultSet) throws SQLException {
@@ -95,5 +93,29 @@ public class AccountDAO {
                 resultSet.getInt("account_id"),
                 resultSet.getString("username"),
                 resultSet.getString("password"));
+    }
+    public Account getAccountById(int accountId) {
+        Connection connection = ConnectionUtil.getConnection();
+    
+        String sql =
+                "SELECT account_id, username, password " +
+                "FROM account WHERE account_id = ?";
+    
+        try (PreparedStatement statement =
+                     connection.prepareStatement(sql)) {
+    
+            statement.setInt(1, accountId);
+    
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) {
+                    return mapAccount(resultSet);
+                }
+            }
+    
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    
+        return null;
     }
 }
