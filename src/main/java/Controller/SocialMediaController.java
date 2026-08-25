@@ -40,14 +40,16 @@ public class SocialMediaController {
         try{
             Account requestedAccount = context.bodyAsClass(Account.class);
             Account registeredAcc = AccountService.addAccount(requestedAccount);
+            context.status(200);
+            context.json(registeredAcc);
         } catch( IllegalArgumentException e){
             context.status(400);
             context.result(e.getMessage());
         } catch(DuplicateUsernameException e){
-            context.status(40);
+            context.status(409);
             context.result(e.getMessage());
         }
-        context.json("sample text");
+        
     }
 
 
