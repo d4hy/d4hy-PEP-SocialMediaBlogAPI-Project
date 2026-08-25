@@ -1,5 +1,6 @@
 package Controller;
 
+import Exception.DuplicateUsernameException;
 import Model.Account;
 import Service.AccountService;
 import io.javalin.Javalin;
@@ -35,10 +36,16 @@ public class SocialMediaController {
      * @param context The Javalin Context object manages information about both the HTTP request and response.
      */
     private void postAccountHandler(Context context) {
-        Account account = context.bodyAsClass(Account.class);
-        Account addedAcc = AccountService.addAccount(account);
-        if(addedAcc){
-
+       
+        try{
+            Account requestedAccount = context.bodyAsClass(Account.class);
+            Account registeredAcc = AccountService.addAccount(requestedAccount);
+        } catch( IllegalArgumentException e){
+            context.status(400);
+            context.result(e.getMessage());
+        } catch(DuplicateUsernameException e){
+            context.status(40);
+            context.result(e.getMessage());
         }
         context.json("sample text");
     }
