@@ -11,14 +11,15 @@ import java.sql.Statement;
 
 public class AccountDAO {
 
-    public Account insertAccount(Account account) throws SQLException {
+    public Account insertAccount(Account account)  {
         Connection connection = ConnectionUtil.getConnection();
-        String sql = "INSERT INTO account (username, password) VALUES (?, ?)";
-        PreparedStatement statement =
-                connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-        ResultSet generatedKeys = null;
+     
 
         try {
+            String sql = "INSERT INTO account (username, password) VALUES (?, ?)";
+            PreparedStatement statement =
+                    connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            ResultSet generatedKeys = null;
             statement.setString(1, account.username);
             statement.setString(2, account.password);
 
