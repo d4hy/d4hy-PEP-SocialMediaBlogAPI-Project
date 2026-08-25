@@ -100,9 +100,12 @@ public class MessageDAO {
             PreparedStatement statement = connection.prepareStatement(sql);
             statement.setInt(1, messageId);
 
-            if (statement.executeUpdate() > 0) {
-                return message;
+            int rowsDeleted = statement.executeUpdate();
+            if (rowsDeleted == 0) {
+                return null;
             }
+
+            return message;
 
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -120,9 +123,12 @@ public class MessageDAO {
             statement.setString(1, messageText);
             statement.setInt(2, messageId);
 
-            if (statement.executeUpdate() > 0) {
-                return getMessageById(messageId);
+            int rowsUpdated = statement.executeUpdate();
+            if (rowsUpdated == 0) {
+                return null;
             }
+
+            return getMessageById(messageId);
 
         } catch (SQLException e) {
             System.out.println(e.getMessage());
